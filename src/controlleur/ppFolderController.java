@@ -14,11 +14,14 @@ public class ppFolderController {
 		this.model = model;
 		
 		// les listeners
-		this.vue.ajouterUnPathListener(new ValidatePath());
-		this.vue.allerAajouteruneregleListener(new AllerDansAjouterUneeRegle());
-		this.vue.supprimerUneRegleListener(new SupprimerUneRegle());
-		this.vue.ajouterUneReglelistener(new AjouterUneRegle());
-		this.vue.miseAjourListeRegleListener(new UpdateListRegles());
-		
+		try {
+			this.vue.ajouterUnPathListener(new ValidatePath());
+			this.vue.allerAajouteruneregleListener(new AllerDansAjouterUneeRegle());
+			this.vue.supprimerUneRegleListener(new SupprimerUneRegle());
+			this.vue.ajouterUneReglelistener(new AjouterUneRegle());
+			this.vue.miseAjourListeRegleListener(new UpdateListRegles());
+		}catch(NullPointerException e) {
+			System.out.println("erreur !");
+		}
 	}
 }
