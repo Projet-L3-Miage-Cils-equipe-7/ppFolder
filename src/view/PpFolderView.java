@@ -12,7 +12,6 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import view.PpFolderView;
@@ -22,10 +21,10 @@ public class PpFolderView extends JFrame{
 	private static final long serialVersionUID = 1L;
 	
 	public List<String> regles = new ArrayList<String>();
-	private int largeurPanelRegle = 200;
-	private int hauteurPaneRegle = 600;
 	
-	private int longeurRegle = 100;
+	private int largeurPanelRegle = 250;
+	
+	private int longeurRegle = 200;
 	private int hauteurRegle = 50;
 	
 	// les pannels
@@ -33,6 +32,7 @@ public class PpFolderView extends JFrame{
 	private JPanel fenetreDepart = new JPanel(); // panel pour saisir le chemin vers le dossier
 	private JPanel panelRegles; // panel pour afficher les regles encré a droite
 	private JPanel panelFichiers; // pannel pour afficher les fichiers partie centrale
+	private JPanel panelRegleUtiliser;
 	
 	private JPanel panelAjoutRegle;
 	private JPanel panelSuppressionRegle;
@@ -44,12 +44,14 @@ public class PpFolderView extends JFrame{
 	// les pannel scrollable
 	private JScrollPane PanelScrollableFichiers;
 	private JScrollPane PannelScrollableRegles;
+	private JScrollPane PannelScrollableReglesUtilisees;
 	
 	// les boutons
 	private JButton supprimerRegle;
 	private JButton allerAAjouterRegle;
 	private JButton ajouterUneRegle;
 	private JButton BoutonValiderPath;
+	private JButton lancerTrier;
 	
 	// JComboBox (select en html)
 	private JComboBox<String> selectRegle_list;
@@ -58,28 +60,28 @@ public class PpFolderView extends JFrame{
 	@SuppressWarnings("unused")
 	public PpFolderView() {
 		super("ppFolder v1.1.16");
-		
-		//création de la fenetre
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE );
-		this.setSize(1100, 700);
+		this.setSize(1500, 900);
+		
 		this.setLocationRelativeTo(null);
 		ppFolderInterface = new JPanel();
 		ppFolderInterface = (JPanel) this.getContentPane();
 		ppFolderInterface.setLayout(new BorderLayout());
 		
 		
-		this.initView();
+		this.initView(); // le Logo
 		this.regles = Classifieur.getRule().readSerializedRules();
 		
-		panelFichiers = new JPanel(new GridLayout((regles.size()/3)+1, 3));
+		panelFichiers = new JPanel(new GridLayout((regles.size()/4)+1, 4));
 		
-		ppFolderInterface.setPreferredSize(new Dimension(hauteurPaneRegle,768));
+		ppFolderInterface.setPreferredSize(new Dimension(1100, 700));
 				
 		/**
 		 * Panel de depart
 		 * Donner le chemin absolue du dossier a tirer
 		 * Bouton valider !
 		 */
+		
 		pathDossierField = new PlaceholderTextField("");
 		pathDossierField.setPreferredSize(new Dimension(400, hauteurRegle));
 		pathDossierField.setColumns(20);
@@ -91,7 +93,15 @@ public class PpFolderView extends JFrame{
 		BoutonValiderPath.setSize(new Dimension(300, 1));
 		fenetreDepart.add(pathDossierField);
 		fenetreDepart.add(BoutonValiderPath);
-		this.getPpFolderInterface().add(fenetreDepart, BorderLayout.CENTER);
+		ppFolderInterface.add(fenetreDepart, BorderLayout.CENTER);
+		
+		panelRegleUtiliser = new JPanel(new GridLayout((regles.size())+1, 1));
+		panelRegleUtiliser.setPreferredSize(new Dimension(1200, 200));
+		lancerTrier = new JButton("Ajouter règle");
+		lancerTrier.setPreferredSize(new Dimension(250, 200));
+		
+	
+		ppFolderInterface.add(panelRegleUtiliser, BorderLayout.SOUTH);
 		
 		/**
 		 * Panel des regles de droite
@@ -269,15 +279,17 @@ public class PpFolderView extends JFrame{
 	public JPanel ajouter_boutons_regle() {
 		panelRegles.removeAll();
 		
-//		panelRegles.setPreferredSize(new Dimension(largeurPanelRegle, hauteurPaneRegle));
+		panelRegles.setPreferredSize(new Dimension(largeurPanelRegle, 600));
 		
 		panelRegles.setLayout(new GridLayout(regles.size()+2, 1));
 		
-		panelRegles.add(allerAAjouterRegle).setPreferredSize(new Dimension(longeurRegle, hauteurRegle));
-		panelRegles.add(supprimerRegle).setPreferredSize(new Dimension(longeurRegle, hauteurRegle));
+		panelRegles.add(allerAAjouterRegle).setPreferredSize(new Dimension(largeurPanelRegle, hauteurRegle));
+		panelRegles.add(supprimerRegle).setPreferredSize(new Dimension(largeurPanelRegle, hauteurRegle));
 		
 		for(String rule : getRegles()) {
-			panelRegles.add(new JButton(rule)).setPreferredSize(new Dimension(longeurRegle, hauteurRegle));}
+			panelRegles.add(new JButton(rule)).setPreferredSize(new Dimension(largeurPanelRegle, hauteurRegle));
+		}
+		
 		return panelRegles;
 	}
 	
@@ -285,7 +297,7 @@ public class PpFolderView extends JFrame{
 	 * init a list of rule in the DefaultComboBoxModel
 	 */
 	public void init_list() {
-//		if (modele_regle.getSize()>0){modele_regle.removeAllElements();}
+//		this.getModelRegle().removeAllElements();
 		for(String rule : this.getRegles()) {this.getModelRegle().addElement(rule);}
 	}
 	
@@ -313,7 +325,7 @@ public class PpFolderView extends JFrame{
 	public void afficherFichiers() {
 		panelFichiers.removeAll();
 		
-		panelFichiers.setLayout(new GridLayout((Classifieur.getListeOfPathsFiles().keySet().size()/3)+1, 3));
+		panelFichiers.setLayout(new GridLayout((Classifieur.getListeOfPathsFiles().keySet().size()/4)+1, 4));
 		
 		for (String file : Classifieur.getListeOfPathsFiles().keySet()) {
             JButton tmp = new JButton(new ImageIcon("images/Folder-icon-256.png"));
