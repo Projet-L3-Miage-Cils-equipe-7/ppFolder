@@ -61,23 +61,24 @@ public class PpFolderView extends JFrame{
 		ppFolderInterface = (JPanel) this.getContentPane();
 		ppFolderInterface.setLayout(new BorderLayout());
 		
+		
+		this.initView();
+		this.regles = Classifieur.getRule().readSerializedRules();
+		
 		panelFichiers = new JPanel(new GridLayout((regles.size()/3)+1, 3));
-		PanelScrollableFichiers = new JScrollPane(panelFichiers);
+		
+		
 		ppFolderInterface.setPreferredSize(new Dimension(600,768));
 
-		for (String rules : getRegles()) {panelFichiers.add(new JButton(new ImageIcon("images/Folder-icon-256.png")));}
-		
 		for (String e : regles) {
             JButton tmp = new JButton(new ImageIcon("images/Folder-icon-256.png"));
             tmp.setText(e);
             tmp.setVerticalTextPosition(SwingConstants.BOTTOM);
             tmp.setHorizontalTextPosition(SwingConstants.CENTER);
-            ppFolderInterface.add(tmp);
+            panelFichiers.add(tmp);
         }
-		ppFolderInterface.add(PanelScrollableFichiers, BorderLayout.CENTER);
 		
-		this.initView();
-		this.regles = Classifieur.getRule().readSerializedRules();
+		PanelScrollableFichiers = new JScrollPane(panelFichiers);
 				
 		/**
 		 * Panel de depart
@@ -157,7 +158,7 @@ public class PpFolderView extends JFrame{
 	 * @param listenerPourSupprimerUneRegle
 	 * listener pour supprimer une regle
 	 */
-	public void supprimerUneRegleListener(ActionListener listenerPourSupprimerUneRegle){
+	public void allerASupprimerUneRegleListener(ActionListener listenerPourSupprimerUneRegle){
 		supprimerRegle.addActionListener(listenerPourSupprimerUneRegle);
 	}
 	
@@ -173,7 +174,7 @@ public class PpFolderView extends JFrame{
 	 * @param listenerListRegleUpdate
 	 * mise a jours des regles !
 	 */
-	public void miseAjourListeRegleListener(ActionListener listenerListRegleUpdate) {
+	public void supprimerUneRegleListener(ActionListener listenerListRegleUpdate) {
 		getSelectRegle_list().addActionListener(listenerListRegleUpdate);
 	}
 	
@@ -196,7 +197,10 @@ public class PpFolderView extends JFrame{
 	 * @return {@link JScrollPane}
 	 * retourne le panel de regles de droite
 	 */
-	public JScrollPane getPannelScrollableRegles() {return PannelScrollableRegles;}
+	public JScrollPane getPannelScrollableRegles() {
+		PannelScrollableRegles.setPreferredSize(new Dimension(largeur_regle, 600));
+		return PannelScrollableRegles;
+	}
 	
 	public void setPannelScrollableRegles(JScrollPane e) {this.PannelScrollableRegles = e;}
 	
