@@ -11,6 +11,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import view.PpFolderView;
@@ -23,7 +25,7 @@ public class PpFolderView extends JFrame{
 	private int largeurPanelRegle = 200;
 	private int hauteurPaneRegle = 600;
 	
-	private int longeurRegle = 150;
+	private int longeurRegle = 100;
 	private int hauteurRegle = 50;
 	
 	// les pannels
@@ -55,7 +57,7 @@ public class PpFolderView extends JFrame{
 	
 	@SuppressWarnings("unused")
 	public PpFolderView() {
-		super("ppFolder v1.1.15");
+		super("ppFolder v1.1.16");
 		
 		//création de la fenetre
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE );
@@ -103,7 +105,7 @@ public class PpFolderView extends JFrame{
 		
 		// zone de texte pour ajouter une regle
 		ajout = new PlaceholderTextField("");
-		ajout.setPreferredSize(new Dimension(100, hauteurRegle));
+		ajout.setPreferredSize(new Dimension(longeurRegle, hauteurRegle));
 		ajout.setColumns(10);
 		ajout.setPlaceholder("Ajouter une règle...");
         final Font f1 = ajout.getFont();
@@ -131,21 +133,6 @@ public class PpFolderView extends JFrame{
 	
 //	::::::::::::::::::::::::::: Debut des listeners :::::::::::::::::::::::::::::::
 	
-	public void afficherFichiers() {
-		panelFichiers.removeAll();
-		
-		panelFichiers.setLayout(new GridLayout((regles.size()/3)+1, 3));
-		
-		for (String e : regles) {
-            JButton tmp = new JButton(new ImageIcon("images/Folder-icon-256.png"));
-            tmp.setText(e);
-            tmp.setVerticalTextPosition(SwingConstants.BOTTOM);
-            tmp.setHorizontalTextPosition(SwingConstants.CENTER);
-            panelFichiers.add(tmp);
-        }
-		PanelScrollableFichiers = new JScrollPane(panelFichiers);
-	}
-
 	/**
 	 * @param listenerPourValiderUnPath
 	 * listener pour valider un path entrer par l'utilisateur
@@ -282,7 +269,7 @@ public class PpFolderView extends JFrame{
 	public JPanel ajouter_boutons_regle() {
 		panelRegles.removeAll();
 		
-		panelRegles.setPreferredSize(new Dimension(largeurPanelRegle, hauteurPaneRegle));
+//		panelRegles.setPreferredSize(new Dimension(largeurPanelRegle, hauteurPaneRegle));
 		
 		panelRegles.setLayout(new GridLayout(regles.size()+2, 1));
 		
@@ -308,7 +295,7 @@ public class PpFolderView extends JFrame{
 	 */
 	public Component refresh_regle(String rule) {
 		JButton tmp = new JButton(rule);
-		tmp.setPreferredSize(new Dimension(longeurRegle,hauteurRegle));
+		tmp.setPreferredSize(new Dimension(longeurRegle, hauteurRegle));
 		return tmp;
 	}
 	
@@ -317,10 +304,32 @@ public class PpFolderView extends JFrame{
 		 * Logo partie superieur de l'application
 		*/ 
 		JLabel label_ppf = new JLabel();
-		label_ppf.setPreferredSize(new Dimension(1100,100));
+		label_ppf.setPreferredSize(new Dimension(1100, 100));
 		label_ppf.setBackground(Color.blue);
 		label_ppf.setIcon(new ImageIcon("images/ppFolder.png")); // image du logo
 		ppFolderInterface.add(label_ppf,BorderLayout.NORTH);
+	}
+	
+	public void afficherFichiers() {
+		panelFichiers.removeAll();
+		
+		panelFichiers.setLayout(new GridLayout((Classifieur.getListeOfPathsFiles().keySet().size()/3)+1, 3));
+		
+		for (String file : Classifieur.getListeOfPathsFiles().keySet()) {
+            JButton tmp = new JButton(new ImageIcon("images/Folder-icon-256.png"));
+            
+            File path = new File(file).getAbsoluteFile();
+            
+            if(!path.isDirectory()) {
+            	int index = file.lastIndexOf('/');
+                String file1 = file.substring(index + 1);
+                tmp.setText(file1);
+                tmp.setVerticalTextPosition(SwingConstants.BOTTOM);
+                tmp.setHorizontalTextPosition(SwingConstants.CENTER);
+                panelFichiers.add(tmp);
+            }
+        }
+		PanelScrollableFichiers = new JScrollPane(panelFichiers);
 	}
 	
 	/**
