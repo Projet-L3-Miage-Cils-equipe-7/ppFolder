@@ -104,8 +104,7 @@ public class PpFolderController {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if(!vue.getAjout().getText().isEmpty() || !vue.getAjout().getText().isBlank()) {
-						
+					if(!vue.getAjout().getText().isEmpty() || !vue.getAjout().getText().isBlank() || vue.getAjout().getText() != "") {
 						vue.getPpFolderInterface().remove(vue.getPanelSuppressionRegle());
 			    		vue.getPpFolderInterface().remove(vue.getPanelAjoutRegle());
 				    	vue.getPpFolderInterface().remove(vue.getPannelScrollableRegles());
@@ -121,7 +120,6 @@ public class PpFolderController {
 						vue.getPpFolderInterface().add(vue.getPanelScrollableFichiers(), BorderLayout.CENTER);
 
 						refreshView();
-				        
 					}else {
 						vue.displayErrorMessage("You Need to Enter a correct extension name !");
 					}
