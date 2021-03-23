@@ -111,7 +111,7 @@ public class PpFolderView extends JFrame{
 		supprimerRegle = new JButton("Supprimer règle");
 		
 		PannelScrollableRegles = new JScrollPane(ajouter_boutons_regle());
-		PannelScrollableRegles.setPreferredSize(new Dimension(getlargeurPanelRegle(), 0));
+		PannelScrollableRegles.setPreferredSize(new Dimension(getlargeurPanelRegle(), 600));
 		
 		// zone de texte pour ajouter une regle
 		ajout = new PlaceholderTextField("");
@@ -279,7 +279,7 @@ public class PpFolderView extends JFrame{
 	public JPanel ajouter_boutons_regle() {
 		panelRegles.removeAll();
 		
-		panelRegles.setPreferredSize(new Dimension(largeurPanelRegle, 600));
+		panelRegles.setPreferredSize(new Dimension(0, 600));
 		
 		panelRegles.setLayout(new GridLayout(regles.size()+2, 1));
 		
@@ -329,6 +329,7 @@ public class PpFolderView extends JFrame{
 		
 		for (String file : Classifieur.getListeOfPathsFiles().keySet()) {
             JButton tmp = new JButton(new ImageIcon("images/Folder-icon-256.png"));
+            tmp.setPreferredSize(new Dimension(256,276));
             
             File path = new File(file).getAbsoluteFile();
             
