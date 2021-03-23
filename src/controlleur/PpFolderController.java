@@ -3,6 +3,7 @@ package controlleur;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.nio.file.InvalidPathException;
 
 import javax.swing.JScrollPane;
@@ -28,27 +29,25 @@ public class PpFolderController {
 				@Override
 				public void actionPerformed(ActionEvent event) {
 					if(!vue.getpathDossierField().getText().isEmpty() || ! vue.getpathDossierField().getText().isBlank()) {
-						try {
-							
-							System.out.println("le chemin est: " + vue.getpathDossierField().getText());
-							vue.getPpFolderInterface().remove(vue.getFenetreDepart());
-							
-							vue.getPpFolderInterface().add(vue.getPannelScrollableRegles(), BorderLayout.EAST);
-							
-							@SuppressWarnings("unused")
-							Classifieur model = new Classifieur(vue.getpathDossierField().getText().toString());
-							
-							vue.afficherFichiers();
-							vue.getPpFolderInterface().add(vue.getPanelScrollableFichiers(), BorderLayout.CENTER);
-							
-							refreshView();
-							
-						}catch (InvalidPathException e) {
-							vue.displayErrorMessage("You Need to Enter a correct Path file !");
-						}
-					}else {
-						vue.displayErrorMessage("You Need to Enter a correct Path file !");
-					}
+						File path = new File(vue.getpathDossierField().getText().toString()).getAbsoluteFile();
+						if(path.isDirectory()) {
+							try {
+								System.out.println("le chemin est: " + vue.getpathDossierField().getText());
+								vue.getPpFolderInterface().remove(vue.getFenetreDepart());
+								
+								vue.getPpFolderInterface().add(vue.getPannelScrollableRegles(), BorderLayout.EAST);
+								
+								@SuppressWarnings("unused")
+								Classifieur model = new Classifieur(vue.getpathDossierField().getText().toString());
+								
+								vue.afficherFichiers();
+								vue.getPpFolderInterface().add(vue.getPanelScrollableFichiers(), BorderLayout.CENTER);
+								
+								refreshView();
+								
+							}catch (InvalidPathException e) {vue.displayErrorMessage("You Need to Enter a correct Path file !");}
+						}else {vue.displayErrorMessage("You Need to Enter a correct Path file !");}
+					}else {vue.displayErrorMessage("You Need to Enter a correct Path file !");}
 				}
 			});
 		}catch (NullPointerException e) {vue.displayErrorMessage("Erreur, veuillez redemarer le programme !");}
@@ -114,7 +113,6 @@ public class PpFolderController {
 						vue.getRegles().add(vue.getAjout().getText());
 						
 						vue.getPannelScrollableRegles().add(vue.refresh_regle(vue.getAjout().getText()));
-						
 				    	vue.setPannelScrollableRegles(new JScrollPane(vue.ajouter_boutons_regle()));
 						
 				    	vue.getPpFolderInterface().add(vue.getPannelScrollableRegles(), BorderLayout.EAST);
