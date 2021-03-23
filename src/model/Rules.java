@@ -135,7 +135,6 @@ public class Rules<rule> implements Serializable, Iterable<rule> {
 //		rule.addRule("java, class");
 //		rule.addRule("pdf");
 //		rule.addRule("txt");
-//		rule.addRule("zip");
 //		
 //		rule.serializeRules();
 //		System.out.println(rule.readSerializedRules());

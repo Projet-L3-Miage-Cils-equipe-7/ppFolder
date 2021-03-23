@@ -30,7 +30,7 @@ public class PpFolderController {
 					if(!vue.getpathDossierField().getText().isEmpty() || ! vue.getpathDossierField().getText().isBlank()) {
 						try {
 							
-							System.out.println("le chemin est: "+ vue.getpathDossierField().getText());
+							System.out.println("le chemin est: " + vue.getpathDossierField().getText());
 							vue.getPpFolderInterface().remove(vue.getFenetreDepart());
 							
 							vue.getPpFolderInterface().add(vue.getPannelScrollableRegles(), BorderLayout.EAST);
@@ -38,6 +38,7 @@ public class PpFolderController {
 							@SuppressWarnings("unused")
 							Classifieur model = new Classifieur(vue.getpathDossierField().getText().toString());
 							
+							vue.afficherFichiers();
 							vue.getPpFolderInterface().add(vue.getPanelScrollableFichiers(), BorderLayout.CENTER);
 							
 							refreshView();
@@ -113,9 +114,12 @@ public class PpFolderController {
 						vue.getRegles().add(vue.getAjout().getText());
 						
 						vue.getPannelScrollableRegles().add(vue.refresh_regle(vue.getAjout().getText()));
-				    	vue.setPannelScrollableRegles(new JScrollPane(vue.ajouter_boutons_regle()));
-						vue.getPpFolderInterface().add(vue.getPannelScrollableRegles(), BorderLayout.EAST);
 						
+				    	vue.setPannelScrollableRegles(new JScrollPane(vue.ajouter_boutons_regle()));
+						
+				    	vue.getPpFolderInterface().add(vue.getPannelScrollableRegles(), BorderLayout.EAST);
+						
+				    	vue.afficherFichiers();
 						vue.getPpFolderInterface().add(vue.getPanelScrollableFichiers(), BorderLayout.CENTER);
 
 						refreshView();
@@ -145,8 +149,10 @@ public class PpFolderController {
 				    	vue.getPpFolderInterface().remove(vue.getPannelScrollableRegles());
 				    	
 				    	vue.setPannelScrollableRegles(new JScrollPane(vue.ajouter_boutons_regle()));
+				    	
 						vue.getPpFolderInterface().add(vue.getPannelScrollableRegles(), BorderLayout.EAST);
 						
+						vue.afficherFichiers();
 						vue.getPpFolderInterface().add(vue.getPanelScrollableFichiers(), BorderLayout.CENTER);
 
 						refreshView();
