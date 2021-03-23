@@ -2,6 +2,8 @@ package view;
 
 import javax.swing.*;
 
+import model.Classifieur;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -11,6 +13,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import view.PpFolderView;
 
 public class PpFolderView extends JFrame{
 
@@ -58,13 +61,23 @@ public class PpFolderView extends JFrame{
 		ppFolderInterface = (JPanel) this.getContentPane();
 		ppFolderInterface.setLayout(new BorderLayout());
 		
-		panelFichiers = new JPanel(new GridLayout((regles.size()/3)+1,3));
+		panelFichiers = new JPanel(new GridLayout((regles.size()/3)+1, 3));
 		PanelScrollableFichiers = new JScrollPane(panelFichiers);
 		ppFolderInterface.setPreferredSize(new Dimension(600,768));
+
 		for (String rules : getRegles()) {panelFichiers.add(new JButton(new ImageIcon("images/Folder-icon-256.png")));}
+		
+		for (String e : regles) {
+            JButton tmp = new JButton(new ImageIcon("images/Folder-icon-256.png"));
+            tmp.setText(e);
+            tmp.setVerticalTextPosition(SwingConstants.BOTTOM);
+            tmp.setHorizontalTextPosition(SwingConstants.CENTER);
+            ppFolderInterface.add(tmp);
+        }
 		ppFolderInterface.add(PanelScrollableFichiers, BorderLayout.CENTER);
 		
 		this.initView();
+		this.regles = Classifieur.getRule().readSerializedRules();
 				
 		/**
 		 * Panel de depart
@@ -255,8 +268,7 @@ public class PpFolderView extends JFrame{
 		this.panelRegles.add(allerAAjouterRegle).setPreferredSize(new Dimension(150, 50));
 		this.panelRegles.add(supprimerRegle).setPreferredSize(new Dimension(150, 50));
 		for(String rule : getRegles()) {
-			panelRegles.add(new JButton(rule)).setPreferredSize(new Dimension(150, 50));
-		}
+			panelRegles.add(new JButton(rule)).setPreferredSize(new Dimension(150, 50));}
 		return this.panelRegles;
 	}
 	
@@ -264,6 +276,7 @@ public class PpFolderView extends JFrame{
 	 * init a list of rule in the DefaultComboBoxModel
 	 */
 	public void init_list() {
+//		if (modele_regle.getSize()>0){modele_regle.removeAllElements();}
 		for(String rule : this.getRegles()) {this.getModelRegle().addElement(rule);}
 	}
 	
