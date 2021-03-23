@@ -130,7 +130,13 @@ public class Rules<rule> implements Serializable, Iterable<rule> {
 //	public static void main(String[] args) {
 //		Rules<String> rule = new Rules<>();
 ////		rule.regles = rule.readSerializedRules();
+//		
 //		rule.addRule("php");
+//		rule.addRule("java, class");
+//		rule.addRule("pdf");
+//		rule.addRule("txt");
+//		rule.addRule("zip");
+//		
 //		rule.serializeRules();
 //		System.out.println(rule.readSerializedRules());
 //		
