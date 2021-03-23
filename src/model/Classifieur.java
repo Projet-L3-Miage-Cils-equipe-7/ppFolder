@@ -23,8 +23,6 @@ public class Classifieur {
 		listFiles(this.mainPath);
 	}
 	
-	public Classifieur() {}
-	
 	/**
 	 * @param path
 	 * @return void
@@ -42,14 +40,11 @@ public class Classifieur {
 	 * @return String
 	 * get_extension ==> permet de bien decouper l'extension du fichier
 	 */
-	public static String get_extension(String s) {
+	public static String get_extension(String fileName) {
 		String extension = "";
-		boolean fin = false;
-		for(int i=0; i< s.toString().length(); i++) {
-    		if(fin) {extension += s.toString().charAt(i);}
-    		if(s.toString().charAt(i)=='.') {fin = true;}
-    	}
-    	return extension;
+        int index = fileName.lastIndexOf('.');
+        if (index > 0) {extension = fileName.substring(index + 1);}
+        return extension;
     }
 	
 	/**
@@ -84,9 +79,7 @@ public class Classifieur {
 		Folder cd = new Folder(this.mainPath.toString());
 		List<String> listRules = getRule().readSerializedRules();
 		for (int i = 0; i < listRules.size(); i++) {
-			if(listRules.get(i).toString().contains((CharSequence) getListeOfPathsFiles().values())) {
-				cd.create_Dir(listRules.get(i).replaceAll(",", " -"));
-			}
+			cd.create_Dir(listRules.get(i).replaceAll(",", " -"));
 		}
 		System.out.println("Création des dossiers...");
 	}
@@ -114,4 +107,9 @@ public class Classifieur {
 	public static HashMap<String, String> getListeOfPathsFiles() {
 		return listeOfPathsFiles;
 	}	
+	
+	public static void main(String[] args) throws IOException {
+		Classifieur cl = new Classifieur("/home/mockingbird/Downloads");
+		cl.trier();
+	}
 }
