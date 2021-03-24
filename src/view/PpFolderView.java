@@ -21,6 +21,7 @@ public class PpFolderView extends JFrame{
 	private static final long serialVersionUID = 1L;
 	
 	public List<String> regles = new ArrayList<String>();
+	public List<String> regles_selectionnees = new ArrayList<String>();
 	
 	private int largeurPanelRegle = 250;
 	
@@ -68,9 +69,21 @@ public class PpFolderView extends JFrame{
 		ppFolderInterface = (JPanel) this.getContentPane();
 		ppFolderInterface.setLayout(new BorderLayout());
 		
+
 		
-		this.initView(); // le Logo
 		this.regles = Classifieur.getRule().readSerializedRules();
+		regles.add("1");
+		regles.add("1");
+		regles.add("1");
+		regles.add("1");
+		regles.add("1");
+		
+		
+		regles_selectionnees.add("exemple");
+		regles_selectionnees.add("exemple");
+		regles_selectionnees.add("exemple");
+		regles_selectionnees.add("exemple");
+		regles_selectionnees.add("exemple");
 		
 		panelFichiers = new JPanel(new GridLayout((regles.size()/4)+1, 4));
 		
@@ -93,15 +106,26 @@ public class PpFolderView extends JFrame{
 		BoutonValiderPath.setSize(new Dimension(300, 1));
 		fenetreDepart.add(pathDossierField);
 		fenetreDepart.add(BoutonValiderPath);
+		
+		
 		ppFolderInterface.add(fenetreDepart, BorderLayout.CENTER);
 		
-		panelRegleUtiliser = new JPanel(new GridLayout((regles.size())+1, 1));
-		panelRegleUtiliser.setPreferredSize(new Dimension(1200, 200));
-		lancerTrier = new JButton("Ajouter règle");
-		lancerTrier.setPreferredSize(new Dimension(250, 200));
 		
-	
-		ppFolderInterface.add(panelRegleUtiliser, BorderLayout.SOUTH);
+		panelRegleUtiliser = new JPanel();
+		panelRegleUtiliser.setLayout(new GridLayout(1, regles_selectionnees.size()+1));
+		
+		panelRegleUtiliser.setPreferredSize(new Dimension(1200, 180));
+		lancerTrier = new JButton("Ajouter règle");
+		lancerTrier.setPreferredSize(new Dimension(200, 180));
+		PannelScrollableReglesUtilisees = new JScrollPane(panelRegleUtiliser);
+		PannelScrollableReglesUtilisees.setPreferredSize(new Dimension(1000, 200));
+		ppFolderInterface.add(PannelScrollableReglesUtilisees, BorderLayout.SOUTH);
+		
+		
+		
+		this.initView();
+		
+		
 		
 		/**
 		 * Panel des regles de droite
@@ -109,8 +133,9 @@ public class PpFolderView extends JFrame{
 		panelRegles = new JPanel(new GridLayout(regles.size()+2, 1));
 		allerAAjouterRegle = new JButton("Ajouter règle");
 		supprimerRegle = new JButton("Supprimer règle");
+		ajouter_boutons_regle();
 		
-		PannelScrollableRegles = new JScrollPane(ajouter_boutons_regle());
+		PannelScrollableRegles = new JScrollPane(panelRegles);
 		PannelScrollableRegles.setPreferredSize(new Dimension(getlargeurPanelRegle(), 600));
 		
 		// zone de texte pour ajouter une regle
@@ -182,6 +207,9 @@ public class PpFolderView extends JFrame{
 	public void supprimerUneRegleListener(ActionListener listenerListRegleUpdate) {
 		getSelectRegle_list().addActionListener(listenerListRegleUpdate);
 	}
+	
+	
+
 	
 //	::::::::::::::::::::::::::: Fin des listeners :::::::::::::::::::::::::::::::::
 	
@@ -271,15 +299,16 @@ public class PpFolderView extends JFrame{
 	 */
 	public JPanel getPanelRegles() {return panelRegles;}
 	
+	
 //	::::::::::::::::::::::::: fin des getters/setters :::::::::::::::::::::::::::::
 	
 	/**
 	 * @return {@link JPanel}
 	 */
-	public JPanel ajouter_boutons_regle() {
+	public void ajouter_boutons_regle() {
 		panelRegles.removeAll();
 		
-		panelRegles.setPreferredSize(new Dimension(0, 600));
+		panelRegles.setPreferredSize(new Dimension(0, regles.size()*50));
 		
 		panelRegles.setLayout(new GridLayout(regles.size()+2, 1));
 		
@@ -290,16 +319,17 @@ public class PpFolderView extends JFrame{
 			panelRegles.add(new JButton(rule)).setPreferredSize(new Dimension(largeurPanelRegle, hauteurRegle));
 		}
 		
-		return panelRegles;
+	}
+	
+	public void reset() {
+		ppFolderInterface.removeAll();
+		initView();
 	}
 	
 	/**
 	 * init a list of rule in the DefaultComboBoxModel
 	 */
-	public void init_list() {
-//		this.getModelRegle().removeAllElements();
-		for(String rule : this.getRegles()) {this.getModelRegle().addElement(rule);}
-	}
+
 	
 	/**
 	 * @param rule
@@ -345,6 +375,64 @@ public class PpFolderView extends JFrame{
 		PanelScrollableFichiers = new JScrollPane(panelFichiers);
 	}
 	
+	public void dessin_panel_fichier() {
+		panelFichiers = new JPanel(new GridLayout((regles.size()/4)+1, 4));
+		
+		for(String e : regles) {
+			  JButton tmp = new JButton(new ImageIcon("images/Folder-icon-256.png"));
+	            tmp.setPreferredSize(new Dimension(256,276));
+                tmp.setText(e);
+                tmp.setVerticalTextPosition(SwingConstants.BOTTOM);
+                tmp.setHorizontalTextPosition(SwingConstants.CENTER);
+                panelFichiers.add(tmp);
+		}
+		
+		
+		PanelScrollableFichiers = new JScrollPane(panelFichiers);
+		ppFolderInterface.add(PanelScrollableFichiers,BorderLayout.CENTER);
+	}
+	
+	
+	
+	public void dessin_regles() {
+		ajouter_boutons_regle();
+		PannelScrollableRegles.setPreferredSize(new Dimension(getlargeurPanelRegle(), 600));
+		ppFolderInterface.add(PannelScrollableRegles,BorderLayout.EAST);
+	}
+	
+	
+	public void dessin_ajoutregle() {
+		ppFolderInterface.add(panelAjoutRegle,BorderLayout.CENTER);
+	}
+	
+	
+	public void refresh_scrollRegle(){
+		ajouter_boutons_regle();
+		PannelScrollableRegles = new JScrollPane(panelRegles);
+	}
+	
+	public void refresh_regle_selectionnees() {
+		panelRegleUtiliser.removeAll();
+		panelRegleUtiliser.setLayout(new GridLayout(1, regles_selectionnees.size()+1));
+		panelRegleUtiliser.setPreferredSize(new Dimension(regles_selectionnees.size()*300, 180));
+		
+		for(String s : regles_selectionnees) {
+			JButton tmp = new JButton(s);
+			tmp.setPreferredSize(new Dimension(800, 150));
+			panelRegleUtiliser.add(tmp);
+		}
+		panelRegleUtiliser.add(lancerTrier);
+		ppFolderInterface.add(PannelScrollableReglesUtilisees,BorderLayout.SOUTH);
+		
+	}
+	
+	
+	public void init_list() {
+		this.getModelRegle().removeAllElements();
+		for(String rule : this.regles) {this.getModelRegle().addElement(rule);}
+		getSelectRegle_list().setModel(modelRegle);
+		
+	}
 	/**
 	 * @param errorMessage
 	 * => Open a popup that contains the error message passed

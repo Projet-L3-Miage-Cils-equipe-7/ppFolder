@@ -15,7 +15,8 @@ public class Rules<rule> implements Serializable, Iterable<rule> {
 	private static final long serialVersionUID = -6727582880792299950L;
 	private List<rule> regles = new ArrayList<>();
 	
-	
+	public Rules(List<rule> regles) {this.regles = regles;}
+
 	/**
 	 * @param rule
 	 * @return boolean
@@ -128,19 +129,10 @@ public class Rules<rule> implements Serializable, Iterable<rule> {
 	}
 	
 //	public static void main(String[] args) {
-//		Rules<String> rule = new Rules<>();
-////		rule.regles = rule.readSerializedRules();
+//		Rules<String> rule = new Rules<>(new ArrayList<>());
+//		rule.regles = rule.readSerializedRules();
 //		
-//		rule.addRule("php");
-//		rule.addRule("java, class");
-//		rule.addRule("pdf");
-//		rule.addRule("txt");
-//		
-//		rule.serializeRules();
-//		System.out.println(rule.readSerializedRules());
-//		
-//		System.out.println("1");
-//		System.out.println(rule.getRules());
+//		System.out.println(rule.readSerializedRules());		
 //	}
 	
 }
