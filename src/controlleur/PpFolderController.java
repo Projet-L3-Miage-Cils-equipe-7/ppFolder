@@ -1,5 +1,6 @@
 package controlleur;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -24,8 +25,8 @@ public class PpFolderController {
 					vue.initView();
 					vue.dessin_panel_fichier();
 					vue.dessin_regles();
-					vue.refresh_regle_selectionnees();
-					
+					vue.dess_panelbas();
+					vue.getPpFolderInterface().add(vue.getPanelbas(),BorderLayout.SOUTH);
 					refreshView();
 			}});
 
@@ -37,6 +38,8 @@ public class PpFolderController {
 					
 					vue.getPpFolderInterface().add(vue.getPanelAjoutRegle());
 					vue.dessin_regles();
+					vue.getPpFolderInterface().add(vue.getPanelbas(),BorderLayout.SOUTH);
+					
 					
 					refreshView();
 				}});
@@ -48,9 +51,12 @@ public class PpFolderController {
 				vue.getPpFolderInterface().removeAll();
 				vue.initView();
 				
+				vue.dessin_regles();
+				
 				
 				vue.getPpFolderInterface().add(vue.getPanelSuppressionRegle());
-				vue.dessin_regles();
+				vue.dess_panelbas();
+				vue.getPpFolderInterface().add(vue.getPanelbas(),BorderLayout.SOUTH);
 				
 				
 				refreshView();
@@ -67,9 +73,12 @@ public class PpFolderController {
 					vue.regles.add(vue.getAjout().getText());
 					vue.getModelRegle().addElement(vue.getAjout().getText());
 					
-					vue.refresh_regle_selectionnees();
+					vue.dessin_regles();
 					vue.dessin_panel_fichier();
 					vue.dessin_regles();
+					
+					vue.dess_panelbas();
+					vue.getPpFolderInterface().add(vue.getPanelbas(),BorderLayout.SOUTH);
 					refreshView();
 
 				}
@@ -90,16 +99,13 @@ public class PpFolderController {
 					
 					vue.dessin_panel_fichier();
 					vue.dessin_regles();
-					vue.refresh_regle_selectionnees();
+					
+					vue.dess_panelbas();
+					vue.getPpFolderInterface().add(vue.getPanelbas(),BorderLayout.SOUTH);
 					refreshView();
 			    	}
 				
 			});
-			
-			
-			
-			
-
 	}
 	
 	public void refreshView() {
