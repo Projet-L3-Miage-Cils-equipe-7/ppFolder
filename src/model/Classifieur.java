@@ -5,13 +5,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class Classifieur {
 	
 	private File mainPath;
-	private static Rules<String> rule = new Rules<>();
+	private static Rules<String> rule = new Rules<>(new ArrayList<>());
 	private static HashMap<String, String> listeOfPathsFiles = new HashMap<>();
 	
 	/**
