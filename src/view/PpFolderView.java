@@ -10,6 +10,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class PpFolderView extends JFrame{
 	private JPanel panelRegles; // panel pour afficher les regles encré a droite
 	private JPanel panelFichiers; // pannel pour afficher les fichiers partie centrale
 	private JPanel panelRegleUtiliser;
+	private JPanel panelbas;
 	
 	private JPanel panelAjoutRegle;
 	private JPanel panelSuppressionRegle;
@@ -81,9 +83,7 @@ public class PpFolderView extends JFrame{
 		
 		regles_selectionnees.add("exemple");
 		regles_selectionnees.add("exemple");
-		regles_selectionnees.add("exemple");
-		regles_selectionnees.add("exemple");
-		regles_selectionnees.add("exemple");
+
 		
 		panelFichiers = new JPanel(new GridLayout((regles.size()/4)+1, 4));
 		
@@ -110,18 +110,22 @@ public class PpFolderView extends JFrame{
 		
 		ppFolderInterface.add(fenetreDepart, BorderLayout.CENTER);
 		
+		setPanelbas(new JPanel());
+		getPanelbas().setLayout(new BorderLayout());
+		getPanelbas().setSize(new Dimension(1200, 200));
 		
 		panelRegleUtiliser = new JPanel();
 		panelRegleUtiliser.setLayout(new GridLayout(1, regles_selectionnees.size()+1));
-		
-		panelRegleUtiliser.setPreferredSize(new Dimension(1200, 180));
-		lancerTrier = new JButton("Ajouter règle");
-		lancerTrier.setPreferredSize(new Dimension(200, 180));
+		lancerTrier = new JButton("Lancer tri");
+		lancerTrier.setPreferredSize(new Dimension(250, 180));
 		PannelScrollableReglesUtilisees = new JScrollPane(panelRegleUtiliser);
-		PannelScrollableReglesUtilisees.setPreferredSize(new Dimension(1000, 200));
-		ppFolderInterface.add(PannelScrollableReglesUtilisees, BorderLayout.SOUTH);
+		PannelScrollableReglesUtilisees.setPreferredSize(new Dimension(1100, 200));
 		
+		ppFolderInterface.add(getPanelbas(), BorderLayout.SOUTH);
+	
 		
+		getPanelbas().add(lancerTrier,BorderLayout.EAST);
+		getPanelbas().add(PannelScrollableReglesUtilisees, BorderLayout.CENTER);
 		
 		this.initView();
 		
@@ -131,8 +135,8 @@ public class PpFolderView extends JFrame{
 		 * Panel des regles de droite
 		 */
 		panelRegles = new JPanel(new GridLayout(regles.size()+2, 1));
-		allerAAjouterRegle = new JButton("Ajouter règle");
-		supprimerRegle = new JButton("Supprimer règle");
+		allerAAjouterRegle = new JButton("Ajouter regle");
+		supprimerRegle = new JButton("Supprimer regle");
 		ajouter_boutons_regle();
 		
 		PannelScrollableRegles = new JScrollPane(panelRegles);
@@ -142,7 +146,7 @@ public class PpFolderView extends JFrame{
 		ajout = new PlaceholderTextField("");
 		ajout.setPreferredSize(new Dimension(longeurRegle, hauteurRegle));
 		ajout.setColumns(10);
-		ajout.setPlaceholder("Ajouter une règle...");
+		ajout.setPlaceholder("Ajouter une regle...");
         final Font f1 = ajout.getFont();
         ajout.setFont(new Font(f1.getName(), f1.getStyle(), 30));
 		ajouterUneRegle = new JButton(new ImageIcon("images/validate-btn.png"));
@@ -153,11 +157,12 @@ public class PpFolderView extends JFrame{
 		
 		
 		panelSuppressionRegle = new JPanel();
-		JLabel texte_suppression = new JLabel("Choisissez la règle a supprimer");
+		JLabel texte_suppression = new JLabel("Choisissez la regle a supprimer");
 		panelSuppressionRegle.add(texte_suppression);
 		selectRegle_list = new JComboBox<String>();
 		modelRegle = new DefaultComboBoxModel<String>();
 		
+		clear_panelbas();
 		this.init_list();
 		
 		getSelectRegle_list().setModel(modelRegle);
@@ -208,6 +213,8 @@ public class PpFolderView extends JFrame{
 		getSelectRegle_list().addActionListener(listenerListRegleUpdate);
 	}
 	
+
+	
 	
 
 	
@@ -215,6 +222,11 @@ public class PpFolderView extends JFrame{
 	
 //	::::::::::::::::::::::::: debut des getters/setters :::::::::::::::::::::::::::::
 	
+	public JTextField getpanelRegleUtiliser() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	/**
 	 * @return {@link JPanel}
 	 * retourne la fenetre de Depart (text + bouton pour valider le path du dossier)
@@ -316,7 +328,18 @@ public class PpFolderView extends JFrame{
 		panelRegles.add(supprimerRegle).setPreferredSize(new Dimension(largeurPanelRegle, hauteurRegle));
 		
 		for(String rule : getRegles()) {
-			panelRegles.add(new JButton(rule)).setPreferredSize(new Dimension(largeurPanelRegle, hauteurRegle));
+			JButton tmp = new JButton(rule);
+			tmp.setPreferredSize(new Dimension(largeurPanelRegle, hauteurRegle));
+			panelRegles.add(tmp);
+			tmp.addActionListener(
+		            new ActionListener() {
+		                public void actionPerformed(ActionEvent e) {
+		                	regles_selectionnees.add(tmp.getText());
+		                	refresh_regle_selectionnees();
+		                	revalidate();
+		                	repaint();
+		                }
+		            });
 		}
 		
 	}
@@ -412,18 +435,26 @@ public class PpFolderView extends JFrame{
 	}
 	
 	public void refresh_regle_selectionnees() {
+
 		panelRegleUtiliser.removeAll();
 		panelRegleUtiliser.setLayout(new GridLayout(1, regles_selectionnees.size()+1));
 		panelRegleUtiliser.setPreferredSize(new Dimension(regles_selectionnees.size()*300, 180));
 		
 		for(String s : regles_selectionnees) {
 			JButton tmp = new JButton(s);
-			tmp.setPreferredSize(new Dimension(800, 150));
+			tmp.setPreferredSize(new Dimension(200, 150));
 			panelRegleUtiliser.add(tmp);
-		}
-		panelRegleUtiliser.add(lancerTrier);
-		ppFolderInterface.add(PannelScrollableReglesUtilisees,BorderLayout.SOUTH);
-		
+			tmp.addActionListener(
+		            new ActionListener() {
+		                public void actionPerformed(ActionEvent e) {
+		                	panelRegleUtiliser.remove(tmp);
+		                	regles_selectionnees.remove(tmp.getText());
+		                	revalidate();
+		                	repaint();
+		                }
+		            });
+		}	
+
 	}
 	
 	
@@ -441,8 +472,29 @@ public class PpFolderView extends JFrame{
 		JOptionPane.showMessageDialog(this, errorMessage);
 	}
 	 
+	
+	
+	public void dess_panelbas() {
+		refresh_regle_selectionnees();
+		panelbas.add(lancerTrier,BorderLayout.EAST);
+		panelbas.add(PannelScrollableReglesUtilisees,BorderLayout.CENTER);
+		ppFolderInterface.add(panelbas,BorderLayout.SOUTH);
+	}
+	
+	
+	public void clear_panelbas() {
+		panelbas.removeAll();
+	}
 //	public static void main(String[] args) {
 //		PpFolderView a = new PpFolderView();
 //		a.setVisible(true);
 //	}
+
+	public JPanel getPanelbas() {
+		return panelbas;
+	}
+
+	public void setPanelbas(JPanel panelbas) {
+		this.panelbas = panelbas;
+	}
 }
