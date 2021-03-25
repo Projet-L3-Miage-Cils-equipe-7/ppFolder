@@ -1,4 +1,4 @@
-## ppFolder
+##ppFolder
 
 ## Introduction
 
@@ -30,10 +30,9 @@ L'application est ppFolder est une application qui a pour but de faciliter la vi
 
 ## Getting Started
 
-Tout d'abord, on indique le chemin du dossier à trier, une fois le chemin indiquer et validé on ce retrouve sur l'interface de travaille, elle contient à droite plusieurs regles entrée par defaut qu'il est bien entendu possible de supprimer dans le bouton "supprimer règle" ainsi que d'en ajouter de nouvelles.
-Pour ajouter une extension, il faut d'abord l'ajouter avec le bouton "ajouter règle" puis saisir la règle et valider sa saisie.  une regle comme nous les appelons est une extension de fichiers à prendre en compte dans l'ajout de celle-ci, elle peut être seul ou composer de plusieurs autres separé par une virgule ", "  une fois la regle ajouté et validé elle est ajouté parmis celles deja presente.
+Tout d'abord, on indique le chemin du dossier à trier, une fois le chemin indiquer et validé on se retrouve sur l'interface de travail, elle contient à droite plusieurs règles entrées par défaut qu'il est bien entendu possible de supprimer avec le bouton "supprimer règle" ainsi que d'en ajouter de nouvelles. Pour ajouter une extension, il faut d'abord l'ajouter avec le bouton "ajouter règle" puis saisir la règle et valider sa saisie. une règle comme nous les appelons est une extension de fichiers à prendre en compte dans l'ajout de celle-ci, elle peut être seul ou composer de plusieurs autres séparées par une virgule ", " une fois la règle ajoutée et validée elle est ajoutée parmi celles déjà présentes.
 
-un partie central ou nous aurons un aperçu de extensions presente dans le dossier, et enfin d'une derniere partie ou nous y ajouterons les regles deja crée au prealable pour que notre tri les prennent en compte, il est possible d'en ajouter en appuyant qur une regle deja ajouté, le systeme d'autorise pas les doublons dans la seection c'est a dire qu'une regle ne peux être selectionné qu'une seul et unique fois et de la retirer en cliquant sur celle-ci dans la partie du bas. le bouton qui lance le tri ne s'active que s'il y'a au moins une regle de selectionnée.
+Une partie centrale où nous aurons un aperçu des extensions presentes dans le dossier. Et enfin, une dernière partie ou nous y ajouterons les règles déjà créees au préalable pour que notre tri les prenne en compte. Il est possible d'en seléctionner une  en appuyant sur une règle deja ajoutée. Le systeme n'autorise pas les doublons dans la seléction. C'est-à-dire qu'une règle ne peut être selectionnée qu'une seule et unique fois. On pourra la retirer en cliquant sur celle-ci dans la partie du bas. Le bouton qui lance le tri ne s'active que s'il y'a au moins une règle de selectionnée.
 Une fois les règles choisies, il faut lancer le tri. L'application triera ensuite les fichiers dans le dossier indiqué au tout début.
 
 ## Changelog 
