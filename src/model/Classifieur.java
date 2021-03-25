@@ -7,14 +7,17 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class Classifieur {
 	
 	private File mainPath;
 	private static Rules<String> rule = new Rules<>(new ArrayList<>());
 	private static HashMap<String, String> listeOfPathsFiles = new HashMap<>();
+	private List<String> listExtension = new ArrayList<>();
 	
 	/**
 	 * Constructeur 
@@ -119,5 +122,12 @@ public class Classifieur {
 	 */
 	public static HashMap<String, String> getListeOfPathsFiles() {
 		return listeOfPathsFiles;
+	}
+	
+	public List<String> getListOfExtension() {
+		Set<String> exts = new HashSet<>(Classifieur.getListeOfPathsFiles().values());
+		this.listExtension.clear();
+		this.listExtension.addAll(exts);
+		return listExtension;
 	}
 }

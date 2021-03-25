@@ -10,9 +10,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import view.PpFolderView;
 
@@ -369,27 +367,6 @@ public class PpFolderView extends JFrame{
 	/**
 	 * @return {@link Void}
 	 */
-	public void dessin_panel_fichier() {
-		List<String> list = new ArrayList<>();
-		Set<String> listExtension = new HashSet<>(Classifieur.getListeOfPathsFiles().values());
-		list.clear();
-		list.addAll(listExtension);
-		panelFichiers = new JPanel(new GridLayout((list.size()/4)+1, 4));
-		for(String file : list) {
-			  JButton tmp = new JButton(new ImageIcon("images/Folder-icon-256.png"));
-			  tmp.setPreferredSize(new Dimension(256,276));
-			  tmp.setText(file);
-			  tmp.setVerticalTextPosition(SwingConstants.BOTTOM);
-			  tmp.setHorizontalTextPosition(SwingConstants.CENTER);
-			  panelFichiers.add(tmp);
-		}
-		PanelScrollableFichiers = new JScrollPane(panelFichiers);
-		ppFolderInterface.add(PanelScrollableFichiers,BorderLayout.CENTER);
-	}
-	
-	/**
-	 * @return {@link Void}
-	 */
 	public void dessin_ajoutregle() {ppFolderInterface.add(panelAjoutRegle,BorderLayout.CENTER);}
 	
 	/**
@@ -406,4 +383,20 @@ public class PpFolderView extends JFrame{
 	 * => Open a popup that contains the error message passed
 	 */
 	public void displayErrorMessage(String errorMessage){JOptionPane.showMessageDialog(this, errorMessage);}
+
+	/**
+	 * @return the panelFichiers
+	 */
+	public void setPanelFichiers(JPanel newPanelFichiers) {panelFichiers = newPanelFichiers;}
+	
+	/**
+	 * 
+	 * @param newPanelFichiers
+	 */
+	public JPanel getPanelFichiers() {return panelFichiers;}
+
+	/**
+	 * @param panelScrollableFichiers the panelScrollableFichiers to set
+	 */
+	public void setPanelScrollableFichiers(JScrollPane panelScrollableFichiers) {PanelScrollableFichiers = panelScrollableFichiers;}
 }

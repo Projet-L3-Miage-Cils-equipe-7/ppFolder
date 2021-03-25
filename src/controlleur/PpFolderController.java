@@ -9,8 +9,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.NoSuchElementException;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
 
 import model.Classifieur;
 import model.Rules;
@@ -46,7 +49,7 @@ public class PpFolderController {
 								
 								model = new Classifieur(vue.getpathDossierField().getText().toString());
 								
-								vue.dessin_panel_fichier();
+								dessin_panel_fichier();
 								dessin_regles();
 								dess_panelbas();
 								vue.getPpFolderInterface().add(vue.getPanelbas(),BorderLayout.SOUTH);
@@ -115,7 +118,7 @@ public class PpFolderController {
 						vue.getModelRegle().addElement(rule);
 						
 						dessin_regles();
-						vue.dessin_panel_fichier();
+						dessin_panel_fichier();
 						dessin_regles();
 						
 						dess_panelbas();
@@ -142,7 +145,7 @@ public class PpFolderController {
 					vue.getPpFolderInterface().removeAll();
 					vue.initView();
 
-					vue.dessin_panel_fichier();
+					dessin_panel_fichier();
 					dessin_regles();
 					
 					dess_panelbas();
@@ -163,7 +166,7 @@ public class PpFolderController {
 				try {
 					model = new Classifieur(vue.getpathDossierField().getText().toString());
 					model.trier(mesReglesSelectionner.getListOfRegles());
-					vue.dessin_panel_fichier();
+					dessin_panel_fichier();
 					refreshView();
 				} catch (IOException e) {vue.displayErrorMessage("Erreur, Impossible de trier ce dossier !");}
 				catch (NullPointerException e) {vue.displayErrorMessage("Erreur, Impossible de trier ce dossier !");}
@@ -246,22 +249,48 @@ public class PpFolderController {
 		}
 	}
 	
+	/**
+	 * 
+	 */
 	public void dessin_regles() {
 		ajouter_boutons_regle();
 		vue.getPannelScrollableRegles().setPreferredSize(new Dimension(vue.getlargeurPanelRegle(), 600));
 		vue.getPpFolderInterface().add(vue.getPannelScrollableRegles(),BorderLayout.EAST);
 	}
 	
+	/**
+	 * 
+	 */
 	public void refresh_scrollRegle(){
 		ajouter_boutons_regle();
 		vue.setPannelScrollableRegles(new JScrollPane(vue.getPanelRegles()));
 	}
 	
+	/**
+	 * 
+	 */
 	public void dess_panelbas() {
 		refresh_regle_selectionnees();
 		vue.getPanelbas().add(vue.getLancerTrier(), BorderLayout.EAST);
 		vue.getPanelbas().add(vue.getPannelScrollableReglesUtilisees(), BorderLayout.CENTER);
 		vue.getPpFolderInterface().add(vue.getPanelbas(), BorderLayout.SOUTH);
+	}
+	
+	/**
+	 * @return {@link Void}
+	 */
+	public void dessin_panel_fichier() {
+		vue.setPanelFichiers(new JPanel(new GridLayout((model.getListOfExtension().size()/4)+1, 4)));
+		for(String file : model.getListOfExtension()) {
+			  JButton tmp = new JButton(new ImageIcon("images/Folder-icon-256.png"));
+			  tmp.setPreferredSize(new Dimension(256,276));
+			  tmp.setText(file);
+			  tmp.setVerticalTextPosition(SwingConstants.BOTTOM);
+			  tmp.setHorizontalTextPosition(SwingConstants.CENTER);
+			  vue.getPanelFichiers().add(tmp);
+		}
+		vue.setPanelScrollableFichiers(new JScrollPane(vue.getPanelFichiers()));
+		vue.getPpFolderInterface().add(vue.getPanelScrollableFichiers(), BorderLayout.CENTER);
 	}
 	
 }
