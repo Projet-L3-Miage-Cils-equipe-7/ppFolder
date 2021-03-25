@@ -1,9 +1,7 @@
 package view;
 
 import javax.swing.*;
-
 import model.Classifieur;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -11,9 +9,11 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import view.PpFolderView;
 
 public class PpFolderView extends JFrame{
@@ -104,6 +104,7 @@ public class PpFolderView extends JFrame{
 		lancerTrier = new JButton("Lancer tri");
 		lancerTrier.setPreferredSize(new Dimension(250, 180));
 		PannelScrollableReglesUtilisees = new JScrollPane(panelRegleUtiliser);
+		
 		getPannelScrollableReglesUtilisees().setPreferredSize(new Dimension(1100, 200));
 		
 		ppFolderInterface.add(getPanelbas(), BorderLayout.SOUTH);
@@ -204,9 +205,10 @@ public class PpFolderView extends JFrame{
 	
 //	::::::::::::::::::::::::: debut des getters/setters :::::::::::::::::::::::::::::
 	
-	public JPanel getpanelRegleUtiliser() {
-		return panelRegleUtiliser;
-	}
+	/**
+	 * @return
+	 */
+	public JPanel getpanelRegleUtiliser() {return panelRegleUtiliser;}
 
 	/**
 	 * @return {@link JPanel}
@@ -368,19 +370,18 @@ public class PpFolderView extends JFrame{
 	 * @return {@link Void}
 	 */
 	public void dessin_panel_fichier() {
-		panelFichiers = new JPanel(new GridLayout((Classifieur.getListeOfPathsFiles().keySet().size()/4)+1, 4));
-		
-		for(String file : Classifieur.getListeOfPathsFiles().keySet()) {
+		List<String> list = new ArrayList<>();
+		Set<String> listExtension = new HashSet<>(Classifieur.getListeOfPathsFiles().values());
+		list.clear();
+		list.addAll(listExtension);
+		panelFichiers = new JPanel(new GridLayout((list.size()/4)+1, 4));
+		for(String file : list) {
 			  JButton tmp = new JButton(new ImageIcon("images/Folder-icon-256.png"));
 			  tmp.setPreferredSize(new Dimension(256,276));
-			  
-			  File path = new File(file).getAbsoluteFile();
-			  if(!path.isDirectory()) {
-				  tmp.setText(path.getName().toString());
-				  tmp.setVerticalTextPosition(SwingConstants.BOTTOM);
-				  tmp.setHorizontalTextPosition(SwingConstants.CENTER);
-				  panelFichiers.add(tmp);
-			  }
+			  tmp.setText(file);
+			  tmp.setVerticalTextPosition(SwingConstants.BOTTOM);
+			  tmp.setHorizontalTextPosition(SwingConstants.CENTER);
+			  panelFichiers.add(tmp);
 		}
 		PanelScrollableFichiers = new JScrollPane(panelFichiers);
 		ppFolderInterface.add(PanelScrollableFichiers,BorderLayout.CENTER);
@@ -389,9 +390,7 @@ public class PpFolderView extends JFrame{
 	/**
 	 * @return {@link Void}
 	 */
-	public void dessin_ajoutregle() {
-		ppFolderInterface.add(panelAjoutRegle,BorderLayout.CENTER);
-	}
+	public void dessin_ajoutregle() {ppFolderInterface.add(panelAjoutRegle,BorderLayout.CENTER);}
 	
 	/**
 	 * @return {@link Void}
@@ -406,7 +405,5 @@ public class PpFolderView extends JFrame{
 	 * @param errorMessage
 	 * => Open a popup that contains the error message passed
 	 */
-	public void displayErrorMessage(String errorMessage){
-		JOptionPane.showMessageDialog(this, errorMessage);
-	}
+	public void displayErrorMessage(String errorMessage){JOptionPane.showMessageDialog(this, errorMessage);}
 }

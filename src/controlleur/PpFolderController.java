@@ -197,6 +197,7 @@ public class PpFolderController {
                 	try {
 	                	vue.getpanelRegleUtiliser().remove(btn);
 	                	mesReglesSelectionner.removeRule(btn.getText().toString());
+	                	refresh_regle_selectionnees();
 //	                	mesReglesSelectionner.serializeRules();
 	                	vue.getLancerTrier().setEnabled( (!vue.regles_selectionnees.isEmpty())? true : false );
 	                	refreshView();
