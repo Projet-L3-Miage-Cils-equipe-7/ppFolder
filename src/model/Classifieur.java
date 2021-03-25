@@ -67,8 +67,10 @@ public class Classifieur {
 	        	 Iterator<String> it = getListeOfPathsFiles().keySet().iterator();
 	        	 while (it.hasNext()) {
 	        		 String i = it.next();
-	        		if (regle.indexOf(get_extension(i).toString()) != -1) {
+	        		if (regle.toLowerCase().indexOf(get_extension(i).toLowerCase().toString()) != -1) {
+	        			if(get_extension(i).indexOf('/') != -1 || get_extension(i).indexOf('\\') != -1 || get_extension(i) != "") {
 	        			this.move_file(i.toString(), this.mainPath+"/"+regle.replaceAll(",", " -").toString());
+	        			}
 	        		}
 	        	}
 	        }

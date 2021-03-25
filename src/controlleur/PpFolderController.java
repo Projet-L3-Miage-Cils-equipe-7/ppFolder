@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.NoSuchElementException;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -50,6 +49,7 @@ public class PpFolderController {
 								model = new Classifieur(vue.getpathDossierField().getText().toString());
 								
 								dessin_panel_fichier();
+								
 								dessin_regles();
 								dess_panelbas();
 								vue.getPpFolderInterface().add(vue.getPanelbas(),BorderLayout.SOUTH);
@@ -119,7 +119,6 @@ public class PpFolderController {
 						
 						dessin_regles();
 						dessin_panel_fichier();
-						dessin_regles();
 						
 						dess_panelbas();
 						vue.getPpFolderInterface().add(vue.getPanelbas(),BorderLayout.SOUTH);
@@ -146,6 +145,7 @@ public class PpFolderController {
 					vue.initView();
 
 					dessin_panel_fichier();
+					
 					dessin_regles();
 					
 					dess_panelbas();
@@ -205,6 +205,7 @@ public class PpFolderController {
 	                	refresh_regle_selectionnees();
 //	                	mesReglesSelectionner.serializeRules();
 	                	vue.getLancerTrier().setEnabled( (!vue.regles_selectionnees.isEmpty())? true : false );
+	                	dessin_panel_fichier();
 	                	refreshView();
                 	}catch (NullPointerException e5) {vue.displayErrorMessage("Erreur, inconnue veuillez redemarer l'application !");}
                 }
@@ -242,6 +243,7 @@ public class PpFolderController {
 							refresh_regle_selectionnees();
 							vue.getLancerTrier().setEnabled( (!vue.regles_selectionnees.isEmpty())? true : false );
 						}
+						dessin_panel_fichier();
 						refreshView();
 					}catch (NullPointerException e6) {vue.displayErrorMessage("Erreur, inconnue veuillez redemarer l'application !");}
 				}
@@ -282,7 +284,7 @@ public class PpFolderController {
 	public void dessin_panel_fichier() {
 		vue.setPanelFichiers(new JPanel(new GridLayout((model.getListOfExtension().size()/4)+1, 4)));
 		for(String file : model.getListOfExtension()) {
-			  JButton tmp = new JButton(new ImageIcon("images/Folder-icon-256.png"));
+			  JButton tmp = new JButton(vue.getFileIcon());
 			  tmp.setPreferredSize(new Dimension(256,276));
 			  tmp.setText(file);
 			  tmp.setVerticalTextPosition(SwingConstants.BOTTOM);
