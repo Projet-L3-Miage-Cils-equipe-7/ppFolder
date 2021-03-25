@@ -39,18 +39,20 @@ public class PpFolderController {
 				if(!vue.getpathDossierField().getText().isEmpty() || !vue.getpathDossierField().getText().isBlank()) {
 					File path = new File(vue.getpathDossierField().getText().toString()).getAbsoluteFile();
 					if(path.isDirectory()) {
-						try {
-							vue.getPpFolderInterface().removeAll();
-							vue.initView();
-							
-							model = new Classifieur(vue.getpathDossierField().getText().toString());
-							
-							vue.dessin_panel_fichier();
-							dessin_regles();
-							dess_panelbas();
-							vue.getPpFolderInterface().add(vue.getPanelbas(),BorderLayout.SOUTH);
-							refreshView();
-						}catch (NullPointerException e) {vue.displayErrorMessage("Erreur, inconnue veuillez redemarer l'application !");}
+						if(path.list().length > 0){
+							try {
+								vue.getPpFolderInterface().removeAll();
+								vue.initView();
+								
+								model = new Classifieur(vue.getpathDossierField().getText().toString());
+								
+								vue.dessin_panel_fichier();
+								dessin_regles();
+								dess_panelbas();
+								vue.getPpFolderInterface().add(vue.getPanelbas(),BorderLayout.SOUTH);
+								refreshView();
+							}catch (NullPointerException e) {vue.displayErrorMessage("Erreur, inconnue veuillez redemarer l'application !");}
+						}else {vue.displayErrorMessage("Erreur, le dossier ciblé ne peux pas etre vide !");}
 					}else {vue.displayErrorMessage("You Need to Enter a correct Path file !");}
 				}else {vue.displayErrorMessage("Le chemin ne peux pas être vide !");}
 			}
