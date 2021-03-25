@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Iterator;
 
 public class Folder {
 
@@ -14,13 +15,11 @@ public class Folder {
 	 * Constructeur
 	 * @param path
 	 */
-	public Folder(String path) {
-		this.pathFile = path;
-	}
+	public Folder(String path) {this.pathFile = path;}
 	
 	/**
 	 * @param nameDir
-	 * @return void
+	 * @return {@link Void}
 	 * @throws IOException
 	 * create_Dir ==> permet de creer un dossier en donnant son nom
 	 * PS: elle le cree dans le repertoire courant !
@@ -36,20 +35,28 @@ public class Folder {
 	
 	/**
 	 * @param nameDir
-	 * @return boolean
+	 * @return {@link Boolean}
 	 * removeDirectory ==> permet de supprimer un dossier en indiquant son nom
 	 * PS: elle le supprimer si il est present dans le repertoire courant && qu'il est vide !
 	 * @throws IOException 
 	 */
-	public boolean removeDirectory(String nameDir) throws IOException {
-		File index = new File(this.pathFile + "/" + nameDir);
-		return (index.exists() && isDirEmpty(nameDir) )? index.delete() : false ;
+	public void removeDirectory() throws IOException {
+		Directories dir = new Directories(this.pathFile.toString());
+		Iterator<String> it = dir.getListOfDirs().iterator();
+		while(it.hasNext()) {
+			String nameDir = it.next().toString();
+			File index = new File(nameDir).getAbsoluteFile();
+			if((index.exists() && isDirEmpty(nameDir))) {
+				index.delete();
+			}
+		}
+		dir.getListOfDirs().clear();
 	}
 	
 	/**
 	 * 
 	 * @param dir
-	 * @return boolean
+	 * @return {@link Boolean}n
 	 * @throws IOException
 	 * isDirEmpty ==> retourne un boolean; (true si le dossier est vide, false sinon)
 	 */
@@ -58,5 +65,4 @@ public class Folder {
 		if (Files.isDirectory(path)) {return (!Files.list(path).findAny().isPresent())? true : false ;} 
 		return false;
 	}
-	
 }

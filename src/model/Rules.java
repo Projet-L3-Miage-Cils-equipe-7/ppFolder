@@ -52,6 +52,11 @@ public class Rules<rule> implements Serializable, Iterable<rule> {
 	public rule removeRule(int index) {return regles.remove(index);}
 	
 	/**
+	 * @return {@link List}
+	 */
+	public List<rule> getListOfRegles() {return regles;}
+	
+	/**
 	 * @param None
 	 * @return rule => void
 	 * removeRule ==> permet de vider la liste des regles
@@ -127,12 +132,4 @@ public class Rules<rule> implements Serializable, Iterable<rule> {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-//	public static void main(String[] args) {
-//		Rules<String> rule = new Rules<>(new ArrayList<>());
-//		rule.regles = rule.readSerializedRules();
-//		
-//		System.out.println(rule.readSerializedRules());		
-//	}
-	
 }
