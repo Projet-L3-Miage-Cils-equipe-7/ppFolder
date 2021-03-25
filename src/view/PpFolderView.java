@@ -10,7 +10,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
@@ -19,7 +18,7 @@ import view.PpFolderView;
 
 public class PpFolderView extends JFrame{
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -1135505697208097249L;
 	
 	public List<String> regles = new ArrayList<String>();
 	public List<String> regles_selectionnees = new ArrayList<String>();
@@ -60,7 +59,6 @@ public class PpFolderView extends JFrame{
 	private JComboBox<String> selectRegle_list;
 	private DefaultComboBoxModel<String> modelRegle;
 	
-	@SuppressWarnings("unused")
 	public PpFolderView() {
 		super("ppFolder v1.1.16");
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE );
@@ -71,19 +69,7 @@ public class PpFolderView extends JFrame{
 		ppFolderInterface = (JPanel) this.getContentPane();
 		ppFolderInterface.setLayout(new BorderLayout());
 		
-
-		
 		this.regles = Classifieur.getRule().readSerializedRules();
-		regles.add("1");
-		regles.add("1");
-		regles.add("1");
-		regles.add("1");
-		regles.add("1");
-		
-		
-		regles_selectionnees.add("exemple");
-		regles_selectionnees.add("exemple");
-
 		
 		panelFichiers = new JPanel(new GridLayout((regles.size()/4)+1, 4));
 		
@@ -96,7 +82,7 @@ public class PpFolderView extends JFrame{
 		 */
 		
 		pathDossierField = new PlaceholderTextField("");
-		pathDossierField.setPreferredSize(new Dimension(400, hauteurRegle));
+		pathDossierField.setPreferredSize(new Dimension(400, getHauteurRegle()));
 		pathDossierField.setColumns(20);
 		pathDossierField.setPlaceholder("Donner un chemin...");
         final Font f = pathDossierField.getFont();
@@ -106,7 +92,6 @@ public class PpFolderView extends JFrame{
 		BoutonValiderPath.setSize(new Dimension(300, 1));
 		fenetreDepart.add(pathDossierField);
 		fenetreDepart.add(BoutonValiderPath);
-		
 		
 		ppFolderInterface.add(fenetreDepart, BorderLayout.CENTER);
 		
@@ -119,17 +104,16 @@ public class PpFolderView extends JFrame{
 		lancerTrier = new JButton("Lancer tri");
 		lancerTrier.setPreferredSize(new Dimension(250, 180));
 		PannelScrollableReglesUtilisees = new JScrollPane(panelRegleUtiliser);
-		PannelScrollableReglesUtilisees.setPreferredSize(new Dimension(1100, 200));
+		getPannelScrollableReglesUtilisees().setPreferredSize(new Dimension(1100, 200));
 		
 		ppFolderInterface.add(getPanelbas(), BorderLayout.SOUTH);
-	
+		
+		if(regles_selectionnees.isEmpty()) {lancerTrier.setEnabled(false);}
 		
 		getPanelbas().add(lancerTrier,BorderLayout.EAST);
-		getPanelbas().add(PannelScrollableReglesUtilisees, BorderLayout.CENTER);
+		getPanelbas().add(getPannelScrollableReglesUtilisees(), BorderLayout.CENTER);
 		
 		this.initView();
-		
-		
 		
 		/**
 		 * Panel des regles de droite
@@ -137,14 +121,13 @@ public class PpFolderView extends JFrame{
 		panelRegles = new JPanel(new GridLayout(regles.size()+2, 1));
 		allerAAjouterRegle = new JButton("Ajouter regle");
 		supprimerRegle = new JButton("Supprimer regle");
-		ajouter_boutons_regle();
-		
+
 		PannelScrollableRegles = new JScrollPane(panelRegles);
 		PannelScrollableRegles.setPreferredSize(new Dimension(getlargeurPanelRegle(), 600));
 		
 		// zone de texte pour ajouter une regle
 		ajout = new PlaceholderTextField("");
-		ajout.setPreferredSize(new Dimension(longeurRegle, hauteurRegle));
+		ajout.setPreferredSize(new Dimension(longeurRegle, getHauteurRegle()));
 		ajout.setColumns(10);
 		ajout.setPlaceholder("Ajouter une regle...");
         final Font f1 = ajout.getFont();
@@ -154,7 +137,6 @@ public class PpFolderView extends JFrame{
 		panelAjoutRegle = new JPanel();
 		panelAjoutRegle.add(ajout);
 		panelAjoutRegle.add(ajouterUneRegle);
-		
 		
 		panelSuppressionRegle = new JPanel();
 		JLabel texte_suppression = new JLabel("Choisissez la regle a supprimer");
@@ -167,7 +149,6 @@ public class PpFolderView extends JFrame{
 		
 		getSelectRegle_list().setModel(modelRegle);
 		panelSuppressionRegle.add(getSelectRegle_list());
-		
 		this.setVisible(true);
 	}
 	
@@ -186,7 +167,7 @@ public class PpFolderView extends JFrame{
 	 * listener pour aller dans le panel ajouter une régle
 	 */
 	public void allerAajouteruneregleListener(ActionListener listenerAjouterUneRegle){
-		allerAAjouterRegle.addActionListener(listenerAjouterUneRegle);
+		getAllerAAjouterRegle().addActionListener(listenerAjouterUneRegle);
 	}
 	
 	/**
@@ -194,7 +175,7 @@ public class PpFolderView extends JFrame{
 	 * listener pour supprimer une regle
 	 */
 	public void allerASupprimerUneRegleListener(ActionListener listenerPourSupprimerUneRegle){
-		supprimerRegle.addActionListener(listenerPourSupprimerUneRegle);
+		getSupprimerRegle().addActionListener(listenerPourSupprimerUneRegle);
 	}
 	
 	/**
@@ -213,18 +194,18 @@ public class PpFolderView extends JFrame{
 		getSelectRegle_list().addActionListener(listenerListRegleUpdate);
 	}
 	
-
-	
-	
-
+	/**
+	 * listener sur le {@link JButton} permet de lancer le tri avec les regles selectionnées
+	 * @param lancerLeTri
+	 */
+	public void lancerLeTri(ActionListener lancerLeTri) {getLancerTrier().addActionListener(lancerLeTri);}
 	
 //	::::::::::::::::::::::::::: Fin des listeners :::::::::::::::::::::::::::::::::
 	
 //	::::::::::::::::::::::::: debut des getters/setters :::::::::::::::::::::::::::::
 	
-	public JTextField getpanelRegleUtiliser() {
-		// TODO Auto-generated method stub
-		return null;
+	public JPanel getpanelRegleUtiliser() {
+		return panelRegleUtiliser;
 	}
 
 	/**
@@ -304,55 +285,62 @@ public class PpFolderView extends JFrame{
 	/**
 	 * @return the largeurPanelRegle
 	 */
-	public int getlargeurPanelRegle() {return largeurPanelRegle;}
+	public int getlargeurPanelRegle() {return getLargeurPanelRegle();}
 	
 	/**
 	 * @return {@link JPanel}
 	 */
 	public JPanel getPanelRegles() {return panelRegles;}
 	
-	
-//	::::::::::::::::::::::::: fin des getters/setters :::::::::::::::::::::::::::::
-	
 	/**
+	 * @return {@link Void}
+	 */
+	public void clear_panelbas() {panelbas.removeAll();}
+
+	/**
+	 * 
 	 * @return {@link JPanel}
 	 */
-	public void ajouter_boutons_regle() {
-		panelRegles.removeAll();
-		
-		panelRegles.setPreferredSize(new Dimension(0, regles.size()*50));
-		
-		panelRegles.setLayout(new GridLayout(regles.size()+2, 1));
-		
-		panelRegles.add(allerAAjouterRegle).setPreferredSize(new Dimension(largeurPanelRegle, hauteurRegle));
-		panelRegles.add(supprimerRegle).setPreferredSize(new Dimension(largeurPanelRegle, hauteurRegle));
-		
-		for(String rule : getRegles()) {
-			JButton tmp = new JButton(rule);
-			tmp.setPreferredSize(new Dimension(largeurPanelRegle, hauteurRegle));
-			panelRegles.add(tmp);
-			tmp.addActionListener(
-		            new ActionListener() {
-		                public void actionPerformed(ActionEvent e) {
-		                	regles_selectionnees.add(tmp.getText());
-		                	refresh_regle_selectionnees();
-		                	revalidate();
-		                	repaint();
-		                }
-		            });
-		}
-		
-	}
-	
-	public void reset() {
-		ppFolderInterface.removeAll();
-		initView();
-	}
-	
-	/**
-	 * init a list of rule in the DefaultComboBoxModel
-	 */
+	public JPanel getPanelbas() {return panelbas;}
 
+	/**
+	 * @return {@link Void}
+	 * @param panelbas
+	 */
+	public void setPanelbas(JPanel panelbas) {this.panelbas = panelbas;}
+
+	/**
+	 * @return {@link Integer}
+	 */
+	public int getLargeurPanelRegle() {return largeurPanelRegle;}
+
+	/**
+	 * @return {@link Integer}
+	 */
+	public int getHauteurRegle() {return hauteurRegle;}
+
+	/**
+	 * @return JButton
+	 */
+	public JButton getSupprimerRegle() {return supprimerRegle;}
+
+	/**
+	 * @return {@link JButton}
+	 */
+	public JButton getAllerAAjouterRegle() {return allerAAjouterRegle;}
+
+	/**
+	 * @return {@link JScrollPane}
+	 */
+	public JScrollPane getPannelScrollableReglesUtilisees() {return PannelScrollableReglesUtilisees;}
+
+	/**
+	 * @return {@link JButton}
+	 */
+	public JButton getLancerTrier() {return lancerTrier;}
+	
+	
+//	::::::::::::::::::::::::: fin des getters/setters :::::::::::::::::::::::::::::
 	
 	/**
 	 * @param rule
@@ -360,14 +348,15 @@ public class PpFolderView extends JFrame{
 	 */
 	public Component refresh_regle(String rule) {
 		JButton tmp = new JButton(rule);
-		tmp.setPreferredSize(new Dimension(longeurRegle, hauteurRegle));
+		tmp.setPreferredSize(new Dimension(longeurRegle, getHauteurRegle()));
 		return tmp;
 	}
 	
+	/**
+	 * @return {@link Void}
+	 * ajoute le Logo dans partie superieur de l'application
+	*/ 
 	public void initView() {
-		/**
-		 * Logo partie superieur de l'application
-		*/ 
 		JLabel label_ppf = new JLabel();
 		label_ppf.setPreferredSize(new Dimension(1100, 100));
 		label_ppf.setBackground(Color.blue);
@@ -375,126 +364,49 @@ public class PpFolderView extends JFrame{
 		ppFolderInterface.add(label_ppf,BorderLayout.NORTH);
 	}
 	
-	public void afficherFichiers() {
-		panelFichiers.removeAll();
-		
-		panelFichiers.setLayout(new GridLayout((Classifieur.getListeOfPathsFiles().keySet().size()/4)+1, 4));
-		
-		for (String file : Classifieur.getListeOfPathsFiles().keySet()) {
-            JButton tmp = new JButton(new ImageIcon("images/Folder-icon-256.png"));
-            tmp.setPreferredSize(new Dimension(256,276));
-            
-            File path = new File(file).getAbsoluteFile();
-            
-            if(!path.isDirectory()) {
-            	int index = file.lastIndexOf('/');
-                String file1 = file.substring(index + 1);
-                tmp.setText(file1);
-                tmp.setVerticalTextPosition(SwingConstants.BOTTOM);
-                tmp.setHorizontalTextPosition(SwingConstants.CENTER);
-                panelFichiers.add(tmp);
-            }
-        }
-		PanelScrollableFichiers = new JScrollPane(panelFichiers);
-	}
-	
+	/**
+	 * @return {@link Void}
+	 */
 	public void dessin_panel_fichier() {
-		panelFichiers = new JPanel(new GridLayout((regles.size()/4)+1, 4));
+		panelFichiers = new JPanel(new GridLayout((Classifieur.getListeOfPathsFiles().keySet().size()/4)+1, 4));
 		
-		for(String e : regles) {
+		for(String file : Classifieur.getListeOfPathsFiles().keySet()) {
 			  JButton tmp = new JButton(new ImageIcon("images/Folder-icon-256.png"));
-	            tmp.setPreferredSize(new Dimension(256,276));
-                tmp.setText(e);
-                tmp.setVerticalTextPosition(SwingConstants.BOTTOM);
-                tmp.setHorizontalTextPosition(SwingConstants.CENTER);
-                panelFichiers.add(tmp);
+			  tmp.setPreferredSize(new Dimension(256,276));
+			  
+			  File path = new File(file).getAbsoluteFile();
+			  if(!path.isDirectory()) {
+				  tmp.setText(path.getName().toString());
+				  tmp.setVerticalTextPosition(SwingConstants.BOTTOM);
+				  tmp.setHorizontalTextPosition(SwingConstants.CENTER);
+				  panelFichiers.add(tmp);
+			  }
 		}
-		
-		
 		PanelScrollableFichiers = new JScrollPane(panelFichiers);
 		ppFolderInterface.add(PanelScrollableFichiers,BorderLayout.CENTER);
 	}
 	
-	
-	
-	public void dessin_regles() {
-		ajouter_boutons_regle();
-		PannelScrollableRegles.setPreferredSize(new Dimension(getlargeurPanelRegle(), 600));
-		ppFolderInterface.add(PannelScrollableRegles,BorderLayout.EAST);
-	}
-	
-	
+	/**
+	 * @return {@link Void}
+	 */
 	public void dessin_ajoutregle() {
 		ppFolderInterface.add(panelAjoutRegle,BorderLayout.CENTER);
 	}
 	
-	
-	public void refresh_scrollRegle(){
-		ajouter_boutons_regle();
-		PannelScrollableRegles = new JScrollPane(panelRegles);
-	}
-	
-	public void refresh_regle_selectionnees() {
-
-		panelRegleUtiliser.removeAll();
-		panelRegleUtiliser.setLayout(new GridLayout(1, regles_selectionnees.size()+1));
-		panelRegleUtiliser.setPreferredSize(new Dimension(regles_selectionnees.size()*300, 180));
-		
-		for(String s : regles_selectionnees) {
-			JButton tmp = new JButton(s);
-			tmp.setPreferredSize(new Dimension(200, 150));
-			panelRegleUtiliser.add(tmp);
-			tmp.addActionListener(
-		            new ActionListener() {
-		                public void actionPerformed(ActionEvent e) {
-		                	panelRegleUtiliser.remove(tmp);
-		                	regles_selectionnees.remove(tmp.getText());
-		                	revalidate();
-		                	repaint();
-		                }
-		            });
-		}	
-
-	}
-	
-	
+	/**
+	 * @return {@link Void}
+	 */
 	public void init_list() {
 		this.getModelRegle().removeAllElements();
 		for(String rule : this.regles) {this.getModelRegle().addElement(rule);}
 		getSelectRegle_list().setModel(modelRegle);
-		
 	}
+	
 	/**
 	 * @param errorMessage
 	 * => Open a popup that contains the error message passed
 	 */
 	public void displayErrorMessage(String errorMessage){
 		JOptionPane.showMessageDialog(this, errorMessage);
-	}
-	 
-	
-	
-	public void dess_panelbas() {
-		refresh_regle_selectionnees();
-		panelbas.add(lancerTrier,BorderLayout.EAST);
-		panelbas.add(PannelScrollableReglesUtilisees,BorderLayout.CENTER);
-		ppFolderInterface.add(panelbas,BorderLayout.SOUTH);
-	}
-	
-	
-	public void clear_panelbas() {
-		panelbas.removeAll();
-	}
-//	public static void main(String[] args) {
-//		PpFolderView a = new PpFolderView();
-//		a.setVisible(true);
-//	}
-
-	public JPanel getPanelbas() {
-		return panelbas;
-	}
-
-	public void setPanelbas(JPanel panelbas) {
-		this.panelbas = panelbas;
 	}
 }

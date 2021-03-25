@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 public class Classifieur {
@@ -19,6 +20,7 @@ public class Classifieur {
 	 * Constructeur 
 	 * @param path
 	 */
+	public Classifieur() {}
 	public Classifieur(String path) {
 		this.mainPath = new File(path).getAbsoluteFile();
 		listFiles(this.mainPath);
@@ -49,24 +51,27 @@ public class Classifieur {
     }
 	
 	/**
+	 * @param regles 
 	 * @param null
 	 * @return void
 	 * trier ==> trier les fichiers selons les regles & le dictionnaire de (path, extension)
 	 * @throws IOException 
 	 */
-	public void trier() throws IOException {
-		this.rulesToFolders();
-		System.out.println("Debut du tri...");
+	public void trier(List<String> regles) throws IOException {
+		this.rulesToFolders(regles);
 		if(!getListeOfPathsFiles().isEmpty()) {
-	        for (String regle : getRule().readSerializedRules()) {
-	        	for (String path : getListeOfPathsFiles().keySet()) {
-	        		if (regle.indexOf(get_extension(path).toString()) != -1) {
-	        			this.move_file(path.toString(), this.mainPath+"/"+regle.replaceAll(",", " -").toString());
+	        for (String regle : regles) {
+	        	 Iterator<String> it = getListeOfPathsFiles().keySet().iterator();
+	        	 while (it.hasNext()) {
+	        		 String i = it.next();
+	        		if (regle.indexOf(get_extension(i).toString()) != -1) {
+	        			this.move_file(i.toString(), this.mainPath+"/"+regle.replaceAll(",", " -").toString());
 	        		}
 	        	}
 	        }
+	        getListeOfPathsFiles().clear();
+	       new Folder(this.mainPath.toString()).removeDirectory();
 		}
-		System.out.println("Fin du tri...");
 	}
 	
 	/**
@@ -76,15 +81,15 @@ public class Classifieur {
 	 * @throws IOException
 	 * rulesToFolders ==> permet de creer des dossiers pour chacunes des regles crée
 	 */
-	private void rulesToFolders() throws IOException {
+	private void rulesToFolders(List<String> regles) throws IOException {
 		Folder cd = new Folder(this.mainPath.toString());
-		List<String> listRules = getRule().readSerializedRules();
-		for (int i = 0; i < listRules.size(); i++) {
-			cd.create_Dir(listRules.get(i).replaceAll(",", " -"));
+		Iterator<String> it = regles.iterator();
+		while(it.hasNext()){
+			String rule = it.next();
+			cd.create_Dir(rule.replaceAll(",", " -"));
 		}
-		System.out.println("Création des dossiers...");
 	}
-	
+
 	/**
 	 * @param source
 	 * @param destination
@@ -97,20 +102,22 @@ public class Classifieur {
 			Files.move(Paths.get(source), Paths.get(dest + "//" + new File(source).getName()), StandardCopyOption.REPLACE_EXISTING);
 			return true;
 		}
-		System.out.println("Erreur sur le dossier de destination !");
 		return false;
 	}
 
+	/**
+	 * getteur pour rule de type Rules<String>
+	 * @return {@link Rules}
+	 */
 	public static Rules<String> getRule() {
 		return rule;
 	}
 
+	/**
+	 * getteur pour la liste les (chemins/extensions) des fichiers
+	 * @return {@link HashMap}
+	 */
 	public static HashMap<String, String> getListeOfPathsFiles() {
 		return listeOfPathsFiles;
-	}	
-	
-	public static void main(String[] args) throws IOException {
-		Classifieur cl = new Classifieur("/home/mockingbird/Downloads");
-		cl.trier();
 	}
 }
