@@ -9,6 +9,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,10 @@ public class PpFolderView extends JFrame{
 	
 	private int longeurRegle = 200;
 	private int hauteurRegle = 50;
+	
+	public ImageIcon logo;
+	public ImageIcon btnValider;
+	public ImageIcon fileIcon;
 	
 	// les pannels
 	private JPanel ppFolderInterface ;
@@ -62,12 +67,24 @@ public class PpFolderView extends JFrame{
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE );
 		this.setSize(1500, 900);
 		
+		logo = new ImageIcon(getClass().getClassLoader().getResource("ppFolder.png"));
+		btnValider = new ImageIcon(getClass().getClassLoader().getResource("validate-btn.png"));
+		fileIcon = new ImageIcon(getClass().getClassLoader().getResource("Folder-icon-256.png"));
+		
 		this.setLocationRelativeTo(null);
 		ppFolderInterface = new JPanel();
 		ppFolderInterface = (JPanel) this.getContentPane();
 		ppFolderInterface.setLayout(new BorderLayout());
 		
-		this.regles = Classifieur.getRule().readSerializedRules();
+		
+		
+		if(new File("Rules.ser").exists()) {
+			this.regles = Classifieur.getRule().readSerializedRules();
+		}else {
+			this.regles.add("pdf");
+			this.regles.add("zip");
+			this.regles.add("png");
+		}
 		
 		panelFichiers = new JPanel(new GridLayout((regles.size()/4)+1, 4));
 		
@@ -86,7 +103,7 @@ public class PpFolderView extends JFrame{
         final Font f = pathDossierField.getFont();
         pathDossierField.setFont(new Font(f.getName(), f.getStyle(), 30));
 
-		BoutonValiderPath = new JButton(new ImageIcon("images/validate-btn.png"));
+		BoutonValiderPath = new JButton(btnValider);
 		BoutonValiderPath.setSize(new Dimension(300, 1));
 		fenetreDepart.add(pathDossierField);
 		fenetreDepart.add(BoutonValiderPath);
@@ -131,7 +148,7 @@ public class PpFolderView extends JFrame{
 		ajout.setPlaceholder("Ajouter une regle...");
         final Font f1 = ajout.getFont();
         ajout.setFont(new Font(f1.getName(), f1.getStyle(), 30));
-		ajouterUneRegle = new JButton(new ImageIcon("images/validate-btn.png"));
+		ajouterUneRegle = new JButton(btnValider);
 		
 		panelAjoutRegle = new JPanel();
 		panelAjoutRegle.add(ajout);
@@ -360,8 +377,8 @@ public class PpFolderView extends JFrame{
 		JLabel label_ppf = new JLabel();
 		label_ppf.setPreferredSize(new Dimension(1100, 100));
 		label_ppf.setBackground(Color.blue);
-		label_ppf.setIcon(new ImageIcon("images/ppFolder.png")); // image du logo
-		ppFolderInterface.add(label_ppf,BorderLayout.NORTH);
+		label_ppf.setIcon(logo); // image du logo
+		ppFolderInterface.add(label_ppf, BorderLayout.NORTH);
 	}
 	
 	/**
@@ -399,4 +416,11 @@ public class PpFolderView extends JFrame{
 	 * @param panelScrollableFichiers the panelScrollableFichiers to set
 	 */
 	public void setPanelScrollableFichiers(JScrollPane panelScrollableFichiers) {PanelScrollableFichiers = panelScrollableFichiers;}
+
+	/**
+	 * @return the fileIcon
+	 */
+	public ImageIcon getFileIcon() {
+		return fileIcon;
+	}
 }
